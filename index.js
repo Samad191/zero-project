@@ -348,6 +348,10 @@ const abi = [
   },
 ];
 
+app.get('/test', (req, res) => {
+  res.send('hello world')
+})
+
 app.post("/submitSig", async (req, res) => {
   const { from, to, amount, signature } = req.body;
   const privateKey = process.env.PRIVATE_KEY
