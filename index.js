@@ -348,9 +348,9 @@ const abi = [
   },
 ];
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 
-app.get("/test", (req, res) => {
+app.get("/", (req, res) => {
   res.send("hello world");
 });
 
@@ -390,4 +390,4 @@ app.put("/getMsgHashFromFinalHash", (req, res) => {
   res.send({ messageHash });
 });
 
-app.listen(port, "0.0.0.0", () => console.log("server running"));
+app.listen(port, "0.0.0.0");
