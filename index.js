@@ -348,16 +348,16 @@ const abi = [
   },
 ];
 
-app.get('/test', (req, res) => {
-  res.send('hello world')
-})
+const port = process.env.PORT || 3000;
+
+app.get("/test", (req, res) => {
+  res.send("hello world");
+});
 
 app.post("/submitSig", async (req, res) => {
   const { from, to, amount, signature } = req.body;
-  const privateKey = process.env.PRIVATE_KEY
-  const provider = new ethers.JsonRpcProvider(
-    process.env.INFURA_URL
-  );
+  const privateKey = process.env.PRIVATE_KEY;
+  const provider = new ethers.JsonRpcProvider(process.env.INFURA_URL);
 
   const wallet = new ethers.Wallet(privateKey, provider);
   const contract = new ethers.Contract(contractAddress, abi, wallet);
@@ -390,4 +390,4 @@ app.put("/getMsgHashFromFinalHash", (req, res) => {
   res.send({ messageHash });
 });
 
-app.listen(4000, () => console.log("server running"));
+app.listen(port, "0.0.0.0", () => console.log("server running"));
