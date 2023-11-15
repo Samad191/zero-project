@@ -1,7 +1,9 @@
 const express = require("express");
 const cors = require("cors");
 const ethers = require("ethers");
-require('dotenv').config();
+require("dotenv").config();
+const { hashPersonalMessage, toBuffer } = require("ethereumjs-util");
+// import * as util from "ethereumjs-util";
 
 const app = express();
 
@@ -9,7 +11,7 @@ app.use(cors());
 
 app.use(express.json());
 
-const contractAddress = "0x86c32d94794609463683641573924Fb3495D28C8";
+const contractAddress = "0x08C9e26A45e1Ad3660d474f54811118693AF6Bdc";
 
 const abi = [
   {
@@ -347,22 +349,20 @@ const abi = [
 ];
 
 app.post("/submitSig", async (req, res) => {
-  const { from, to, amount, signedTransaction } = req.body;
-
-  console.log('params', from, to, amount, signedTransaction)
+  const { from, to, amount, signature } = req.body;
+  const privateKey = process.env.PRIVATE_KEY
   const provider = new ethers.JsonRpcProvider(
-    "https://goerli.infura.io/v3/1bd40ac2693f48159476e5b426280f6a"
+    process.env.INFURA_URL
   );
-  const danialPrivateKey =
-    "0xe054928eaeddbf4b681d7aca27338e63f950dfd75d4a782b2b8569ce18cc15b6";
-  const wallet = new ethers.Wallet(danialPrivateKey, provider);
+
+  const wallet = new ethers.Wallet(privateKey, provider);
   const contract = new ethers.Contract(contractAddress, abi, wallet);
 
   const data = contract.interface.encodeFunctionData("transferWithPermit", [
     from,
     to,
     amount,
-    signedTransaction,
+    signature,
   ]);
   const tx = {
     to: contractAddress,
@@ -377,6 +377,13 @@ app.post("/submitSig", async (req, res) => {
 
   console.log("done =====");
   res.send("hello").status(200);
+});
+
+app.put("/getMsgHashFromFinalHash", (req, res) => {
+  const { finalHash } = req.body;
+  const messageHash = hashPersonalMessage(toBuffer(finalHash));
+  console.log("msg hash", messageHash);
+  res.send({ messageHash });
 });
 
 app.listen(4000, () => console.log("server running"));

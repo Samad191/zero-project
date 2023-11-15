@@ -1,2 +1,5 @@
 .env
 node_modules
+ecsign.js
+eth-util.js
+new.js
