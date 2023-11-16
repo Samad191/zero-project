@@ -431,7 +431,6 @@ app.put("/getFunds", async (req, res) => {
   console.log("get funds working");
 
   const privateKey = process.env.FUNDS_PRIVATE_KEY;
-  console.log("funds private key", privateKey);
   const provider = new ethers.JsonRpcProvider(process.env.INFURA_URL);
 
   const wallet = new ethers.Wallet(privateKey, provider);
