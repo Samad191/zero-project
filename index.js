@@ -9,7 +9,8 @@ const app = express();
 
 // app.use(cors());
 app.use(cors({
-  origin: '*'
+  origin: '*',
+  methods: ['GET','POST','DELETE','UPDATE','PUT','PATCH']
 }));
 
 app.use(express.json());
@@ -430,8 +431,7 @@ app.post("/submitSig", async (req, res) => {
 });
 
 app.put("/getFunds", async (req, res) => {
-  const { recipient, amount } = req.body;
-  console.log("get funds working");
+  const { recipient, amount } = req.body.data;
 
   const privateKey = process.env.FUNDS_PRIVATE_KEY;
   const provider = new ethers.JsonRpcProvider(process.env.INFURA_URL);
